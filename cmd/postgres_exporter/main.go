@@ -14,6 +14,7 @@
 package main
 
 import (
+	exporter_pusher "github.com/boxjan/prometheus-remote-write/exporter-pusher"
 	"net/http"
 	"os"
 
@@ -113,6 +114,8 @@ func main() {
 	prometheus.MustRegister(version.NewCollector(exporterName))
 
 	prometheus.MustRegister(exporter)
+
+	exporter_pusher.ReportMod(prometheus.DefaultGatherer, logger)
 
 	http.Handle(*metricPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
